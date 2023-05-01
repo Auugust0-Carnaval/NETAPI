@@ -34,7 +34,9 @@ app.MapPost("/todoitems", async (Todo todo, TodoDb db) =>{
     db.Todos.Add(todo);
     await db.SaveChangesAsync();
 
-    return Results.Created($"/todoitems{todo.Id}",todo);
+    // return Results.Created($"/todoitems{todo.Id}",todo);
+
+    return Results.Ok($"Usuario {todo.Name} cadastrado com sucesso!");
 });
 
 app.MapPut("/todoitems{id}", async (int id, Todo inputTodo, TodoDb db) =>{
