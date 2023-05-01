@@ -29,3 +29,24 @@ await db.Todos.FindAsync(id)
 is Todo todo
     ? Results.Ok(todo)
     : Results.NotFound("Não encontrado"));
+
+app.MapPost("/todoitems", async (Todo todo, TodoDb db) =>{
+    db.Todos.Add(todo);
+    await db.SaveChangesAsync();
+
+    return Results.Created($"/todoitems{todo.Id}",todo);
+});
+
+app.MapPut("/todoitems{id}", async (int id, Todo inputTodo, TodoDb db) =>{
+    var todo = await db.Todos.FindAsync(id);
+
+    if(todo is null) {
+        return Results.NotFound("Não encontrado");
+    }
+    
+    todo.Name = inputTodo.Name;
+    todo.IsComplete = inputTodo.IsComplete;
+    await db.SaveChangesAsync();
+
+    return Results.NoContent();
+});
